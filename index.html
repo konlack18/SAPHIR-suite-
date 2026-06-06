@@ -3,289 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAPHIR — Infrastructure Numérique Agricole Souveraine</title>
+    <title>SAPHIR Ecosystem - Groupe GODGIE S.A.</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        saphirDark: '#0f172a', /* Bleu nuit institutionnel */
-                        saphirGreen: '#16a34a', /* Vert agronomique */
-                        saphirGold: '#ca8a04', /* Or de gouvernance */
-                    }
-                }
-            }
-        }
-    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans leading-relaxed">
+<body class="bg-slate-900 font-sans antialiased text-slate-200 scroll-smooth" x-data="{ openModule: null }">
 
-    <nav class="bg-saphirDark text-white p-5 sticky top-0 z-50 border-b border-slate-800 shadow-sm">
-        <div class="container mx-auto flex justify-between items-center">
+    <nav class="bg-slate-950/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 shadow-xl">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <span class="text-xl">🛡️</span>
-                <span class="font-bold text-base tracking-wider uppercase">SAPHIR INFRASTRUCTURE</span>
+                <img src="logo-godgie.png" alt="GODGIE" class="h-9 w-auto object-contain" onerror="this.style.display='none';">
+                <span class="font-black tracking-wider text-xl text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-orange-500 to-emerald-400">SAPHIR</span>
+                <span class="text-slate-500 text-xs hidden sm:inline">| Groupe GODGIE S.A.</span>
             </div>
-            <div class="hidden md:flex space-x-8 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                <a href="#differentiation" class="hover:text-white transition">Matrice d'Impact</a>
-                <a href="#imqg-core" class="hover:text-white transition">Innovation IMQG</a>
-                <a href="#architecture" class="hover:text-white transition">Architecture</a>
-                <a href="#projections" class="hover:text-white transition">Projections 2030</a>
+            <div class="flex items-center space-x-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/20 animate-pulse">
+                    🔥 Noyau GAPS Actif
+                </span>
             </div>
-            <span class="bg-saphirGreen px-4 py-2 rounded text-xs font-bold tracking-wide uppercase">BioSynergie Group S.A.</span>
         </div>
     </nav>
 
-    <header class="bg-gradient-to-b from-saphirDark to-slate-900 text-white py-24 px-5 border-b border-slate-800">
-        <div class="max-w-5xl mx-auto text-center">
-            <span class="bg-slate-800 text-slate-300 text-xs uppercase font-medium tracking-widest px-4 py-1.5 rounded-full border border-slate-700">
-                Gouvernance et Résilience des Systèmes Alimentaires — Afrique Centrale
-            </span>
-            <h1 class="text-3xl md:text-5xl font-extrabold mt-6 tracking-tight leading-tight max-w-4xl mx-auto">
-                L'Infrastructure Numérique Souveraine pour la Traçabilité et la Sécurisation Agricole
+    <header class="relative bg-gradient-to-b from-slate-950 via-slate-900 to-slate-900 py-16 px-4 text-center overflow-hidden border-b border-slate-800">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.08)_0%,transparent_70%)]"></div>
+        <div class="max-w-3xl mx-auto relative z-10 fade-in">
+            <div class="mb-6 inline-block bg-slate-950 p-6 rounded-3xl border border-slate-800 shadow-2xl shadow-orange-500/5">
+                <img src="logo-saphir.png" alt="SAPHIR Core" class="h-28 mx-auto object-contain" onerror="this.src='https://placehold.co/120x120/0f172a/f97316?text=SAPHIR';">
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
+                SAPHIR <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-400">Suite v1.0</span>
             </h1>
-            <p class="text-sm md:text-base mt-6 text-slate-400 max-w-3xl mx-auto font-light leading-relaxed">
-                Une architecture technologique intégrée dédiée à l'évaluation des risques phytosanitaires par modélisation mathématique, à la sécurisation des flux de commodités et à l'inclusion financière des chaînes de valeur.
+            <p class="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-8 leading-relaxed">
+                Souveraineté Technologique, Traçabilité des Intrants et Intelligence Phytosanitaire en Afrique Centrale.
             </p>
-            <div class="mt-10 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <a href="#differentiation" class="bg-saphirGreen hover:bg-green-700 text-white font-semibold text-xs uppercase tracking-wider px-7 py-4 rounded transition shadow-md">
-                    Consulter la Note Analytique
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#modules" class="bg-gradient-to-r from-orange-600 to-amber-500 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-orange-600/20 hover:brightness-110 transition-all">
+                    Visualiser les Tableaux de Bord
                 </a>
-                <a href="#status" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-semibold text-xs uppercase tracking-wider px-7 py-4 rounded transition">
-                    État d'Avancement du Projet
+                <a href="#doctrine" class="bg-slate-800/80 border border-slate-700 text-slate-300 font-bold text-xs px-6 py-3 rounded-xl hover:bg-slate-800 transition-all">
+                    Doctrine GAPS
                 </a>
             </div>
         </div>
     </header>
 
-    <section id="differentiation" class="py-20 bg-white">
-        <div class="container mx-auto max-w-4xl px-5">
-            <div class="text-center mb-12">
-                <span class="text-saphirGreen font-bold text-xs uppercase tracking-widest">Alignement Stratégique</span>
-                <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight mt-1">Pourquoi SAPHIR est différent ?</h2>
-                <div class="w-12 h-1 bg-saphirGreen mx-auto mt-3"></div>
+    <section id="doctrine" class="max-w-6xl mx-auto px-4 py-12 border-b border-slate-800 scroll-mt-20">
+        <div class="bg-gradient-to-r from-slate-950 to-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-xl flex flex-col md:flex-row items-center gap-6">
+            <div class="flex-shrink-0 bg-slate-900 p-4 rounded-2xl border border-slate-700 shadow-inner">
+                <img src="logo-gaps.png" alt="GAPS Model" class="h-20 w-20 object-contain" onerror="this.src='https://placehold.co/80x80/0f172a/10b981?text=GAPS';">
             </div>
-
-            <div class="overflow-hidden border border-slate-200 rounded-lg shadow-sm">
-                <table class="w-full text-left border-collapse bg-white text-sm">
-                    <thead class="bg-slate-900 text-white text-xs uppercase tracking-wider">
-                        <tr>
-                            <th class="p-4 font-semibold w-1/2 border-r border-slate-800">Asymétries & Obstacles du Terrain</th>
-                            <th class="p-4 font-semibold w-1/2">Réponse Technologique SAPHIR</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-200 text-slate-700 font-medium">
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-4 border-r border-slate-200 text-red-700 bg-red-50/30">⚠️ Fraude et non-conformité des intrants</td>
-                            <td class="p-4 text-saphirGreen bg-green-50/10">🔬 Core Engine & Modèle IMQG</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-4 border-r border-slate-200 text-red-700 bg-red-50/30">⚠️ Fraude sur les surfaces déclarées</td>
-                            <td class="p-4 text-saphirGreen bg-green-50/10">🗺️ SAPHIR Field (Protocoles d'Arpentage)</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-4 border-r border-slate-200 text-red-700 bg-red-50/30">⚠️ Transactions de brousse non sécurisées</td>
-                            <td class="p-4 text-saphirGreen bg-green-50/10">💱 SAPHIR Trade (Comptes Séquestres Mobiles)</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-4 border-r border-slate-200 text-red-700 bg-red-50/30">⚠️ Déficit de données macro-économiques</td>
-                            <td class="p-4 text-saphirGreen bg-green-50/10">📊 SAPHIR Consulting (Data-Visualisation)</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-4 border-r border-slate-200 text-red-700 bg-red-50/30">⚠️ Rigidité de la gouvernance sanitaire</td>
-                            <td class="p-4 text-saphirGreen bg-green-50/10">🛡️ SAPHIR Compliance (Logs Cryptés SHA-256)</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div>
+                <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Modèle Conceptuel Central</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-white mt-1">GAPS : Gouvernance Active des Systèmes Phytosanitaires</h2>
+                <p class="text-slate-400 text-xs sm:text-sm mt-3 leading-relaxed">
+                    Le modèle <strong>GAPS</strong> encadre l'intégralité de la suite technologique. Il interconnecte les audits de terrain, les analyses de laboratoires et la régulation des flux pour neutraliser les menaces biologiques et valider l'indice de qualité des marchés d'intrants (<strong>IMQG</strong>).
+                </p>
             </div>
         </div>
     </section>
 
-    <section id="imqg-core" class="py-20 bg-slate-900 text-white border-t border-b border-slate-800">
-        <div class="container mx-auto max-w-4xl px-5">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
-                <div class="md:col-span-3">
-                    <span class="text-saphirGold font-bold text-xs uppercase tracking-widest">Noyau Algorithmique Propriétaire</span>
-                    <h2 class="text-2xl md:text-3xl font-bold tracking-tight mt-2 text-white">Le Modèle IMQG : L'Innovation Centrale</h2>
-                    <p class="text-slate-400 mt-4 text-xs md:text-sm leading-relaxed">
-                        Le modèle <strong>IMQG (Input Market Quality Gradient)</strong> est un algorithme mathématique souverain développé pour évaluer en temps réel les indices de risque et de non-conformité des intrants agricoles distribués sur les marchés ruraux. 
-                    </p>
-                    <p class="text-slate-400 mt-3 text-xs md:text-sm leading-relaxed">
-                        Couplé à l'Indice de Mauvaise Gouvernance (IMG), il permet aux experts et brigades d'isoler instantanément les anomalies biologiques et structurelles avant qu'elles ne déstabilisent la productivité des groupements de producteurs.
-                    </p>
-                </div>
-                <div class="md:col-span-2 bg-slate-950 p-6 rounded-xl border border-slate-800 text-center">
-                    <div class="text-xs text-slate-500 font-mono uppercase tracking-wider mb-2">Formulation Algorithmique</div>
-                    <div class="bg-slate-900 p-4 rounded text-xs font-mono text-saphirGreen border border-slate-800 inline-block w-full">
-                        $$f_{\text{fraude}} = (1 - \text{IMQG}) \cdot 0.6 + \text{IMG} \cdot 0.4$$
+    <section id="modules" class="max-w-6xl mx-auto px-4 py-12 border-b border-slate-800 scroll-mt-20">
+        <div class="text-center mb-12">
+            <h2 class="text-2xl font-bold text-white">Domaines d'Intervention & Données Terrain</h2>
+            <p class="text-slate-500 text-xs mt-2">Cliquez sur un module pour ouvrir son espace d'information enrichi, ses visuels et ses indicateurs clés.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+            <div @click="openModule = 'pharma'" class="bg-slate-950 p-5 rounded-2xl border border-slate-800 hover:border-orange-500/40 shadow-sm hover:shadow-orange-500/5 transition-all cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between group">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-bold text-white group-hover:text-orange-400 transition-colors">SAPHIR Pharma</span>
+                        <img src="logo-pharma.png" alt="🔬" class="h-8 w-auto object-contain" onerror="this.src='https://placehold.co/32x32/0f172a/f97316?text=Pharma';">
                     </div>
-                    <div class="text-[10px] text-slate-500 mt-3 italic">Calculateur de probabilité lissé intégré au moteur SAPHIR CORE.</div>
+                    <p class="text-slate-400 text-[11px] leading-relaxed">
+                        Surveillance pathologique, protocole de traitement des plantes malades et certification de la qualité moléculaire des intrants (**IMQG**).
+                    </p>
                 </div>
+                <div class="mt-4 text-[10px] font-semibold text-orange-400 flex items-center">Consulter les rapports & photos <span class="ml-1 group-hover:translate-x-1 transition-transform">→</span></div>
             </div>
+
+            <div @click="openModule = 'trade'" class="bg-slate-950 p-5 rounded-2xl border border-slate-800 hover:border-orange-500/40 shadow-sm hover:shadow-orange-500/5 transition-all cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between group">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-bold text-white group-hover:text-orange-400 transition-colors">SAPHIR Trade</span>
+                        <img src="logo-trade.png" alt="💱" class="h-8 w-auto object-contain" onerror="this.src='https://placehold.co/32x32/0f172a/f97316?text=Trade';">
+                    </div>
+                    <p class="text-slate-400 text-[11px] leading-relaxed">
+                        Bourse d'échange digitale et sécurisation des comptes séquestres mobiles (Escrow) pour la commercialisation des récoltes coopératives.
+                    </p>
+                </div>
+                <div class="mt-4 text-[10px] font-semibold text-orange-400 flex items-center">Voir le mécanisme financier <span class="ml-1 group-hover:translate-x-1 transition-transform">→</span></div>
+            </div>
+
+            <div @click="openModule = 'field'" class="bg-slate-950 p-5 rounded-2xl border border-slate-800 hover:border-orange-500/40 shadow-sm hover:shadow-orange-500/5 transition-all cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between group">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-bold text-white group-hover:text-orange-400 transition-colors">SAPHIR Field</span>
+                        <img src="logo-field.png" alt="🗺️" class="h-8 w-auto object-contain" onerror="this.src='https://placehold.co/32x32/0f172a/f97316?text=Field';">
+                    </div>
+                    <p class="text-slate-400 text-[11px] leading-relaxed">
+                        Cartographie SIG de précision, relevés de parcelles arpentées et suivi épidémiologique d'urgence avec protocole d'alerte à **J+1**.
+                    </p>
+                </div>
+                <div class="mt-4 text-[10px] font-semibold text-orange-400 flex items-center">Ouvrir la carte & démonstrations <span class="ml-1 group-hover:translate-x-1 transition-transform">→</span></div>
+            </div>
+
+            <div @click="openModule = 'femme'" class="bg-slate-950 p-5 rounded-2xl border border-slate-800 hover:border-orange-500/40 shadow-sm hover:shadow-orange-500/5 transition-all cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between group">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-bold text-white group-hover:text-orange-400 transition-colors">SAPHIR Femme v1.0</span>
+                        <img src="logo-femme.png" alt="👩‍🌾" class="h-8 w-auto object-contain" onerror="this.src='https://placehold.co/32x32/0f172a/f97316?text=Femme';">
+                    </div>
+                    <p class="text-slate-400 text-[11px] leading-relaxed">
+                        Gestion de la force de travail, encadrement des jeunes ruraux, suivi social et accompagnement des productrices agricoles.
+                    </p>
+                </div>
+                <div class="mt-4 text-[10px] font-semibold text-orange-400 flex items-center">Consulter l'impact social <span class="ml-1 group-hover:translate-x-1 transition-transform">→</span></div>
+            </div>
+
         </div>
     </section>
 
-    <section id="architecture" class="bg-slate-100 py-20 px-5">
-        <div class="container mx-auto max-w-5xl">
-            <div class="text-center mb-16">
-                <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">Une Architecture Unique Déployée par Rôles</h2>
-                <p class="text-slate-500 text-xs mt-2 max-w-xl mx-auto">
-                    Le moteur central isole la propriété intellectuelle tout en distribuant des modules simplifiés en fonction des prérequis des opérateurs économiques.
+    <section class="max-w-6xl mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-md">
+                <div class="text-orange-500 text-xl mb-3">👁️</div>
+                <h3 class="text-lg font-bold text-white mb-2">Notre Vision</h3>
+                <p class="text-slate-400 text-xs leading-relaxed">
+                    Garantir la résilience et la souveraineté alimentaire en zone CEMAC par la maîtrise absolue des données de brousse et l'intégration des technologies de précision.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded border border-slate-200 shadow-sm">
-                    <div class="text-lg font-bold text-slate-900 mb-1 flex items-center justify-between"><span>SAPHIR Pharma</span> <span>🔬</span></div>
-                    <p class="text-slate-600 text-xs leading-relaxed mt-2">
-                        Évaluation clinique et suivi de la conformité des intrants sur le terrain via le moteur IMQG. Centralisation des alertes épidémiques.
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-md">
+                <div class="text-amber-400 text-xl mb-3">🎯</div>
+                <h3 class="text-lg font-bold text-white mb-2">Objectifs Majeurs</h3>
+                <ul class="text-slate-400 text-xs space-y-2 list-disc pl-4">
+                    <li>Sécurisation des chaînes d'approvisionnement des agro-industriels.</li>
+                    <li>Éradication complète des intrants obsolètes ou frauduleux.</li>
+                    <li>Insertion économique de milliers de femmes et jeunes producteurs.</li>
+                </ul>
+            </div>
+
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-md flex flex-col justify-between">
+                <div>
+                    <div class="text-emerald-400 text-xl mb-3">📢</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Groupe GODGIE S.A.</h3>
+                    <p class="text-slate-400 text-xs italic leading-relaxed mb-4">
+                        "L'écosystème SAPHIR apporte une réponse technologique rigoureuse et structurée aux impératifs de traçabilité et de gouvernance des territoires agricoles."
                     </p>
                 </div>
-                <div class="bg-white p-6 rounded border border-slate-200 shadow-sm">
-                    <div class="text-lg font-bold text-slate-900 mb-1 flex items-center justify-between"><span>SAPHIR Trade</span> <span>💱</span></div>
-                    <p class="text-slate-600 text-xs leading-relaxed mt-2">
-                        Interface de contractualisation commerciale et sécurisation des transactions par le déploiement de comptes séquestres mobiles en brousse.
-                    </p>
-                </div>
-                <div class="bg-white p-6 rounded border border-slate-200 shadow-sm">
-                    <div class="text-lg font-bold text-slate-900 mb-1 flex items-center justify-between"><span>SAPHIR Field</span> <span>🗺️</span></div>
-                    <p class="text-slate-600 text-xs leading-relaxed mt-2">
-                        Outils géospatiaux de délimitation parcellaire et d'arpentage numérique pour certifier les rendements et l'origine physique des récoltes.
-                    </p>
-                </div>
-                <div class="bg-white p-6 rounded border border-slate-200 shadow-sm">
-                    <div class="text-lg font-bold text-slate-900 mb-1 flex items-center justify-between"><span>SAPHIR Inclusion</span> <span>🌍</span></div>
-                    <p class="text-slate-600 text-xs leading-relaxed mt-2">
-                        Programmes d'inclusion financière, d'accès aux micro-crédits et d'accompagnement technique pour les groupements ruraux et jeunes entrepreneurs.
-                    </p>
-                </div>
-                <div class="bg-white p-6 rounded border border-slate-200 shadow-sm">
-                    <div class="text-lg font-bold text-slate-900 mb-1 flex items-center justify-between"><span>SAPHIR Consulting</span> <span>📊</span></div>
-                    <p class="text-slate-600 text-xs leading-relaxed mt-2">
-                        Génération d'indicateurs macro-économiques et analytiques structurés pour les ministères, agences de développement, banques agricoles et exportateurs.
-                    </p>
-                </div>
-                <div class="bg-white p-6 rounded border border-slate-200 shadow-sm">
-                    <div class="text-lg font-bold text-slate-900 mb-1 flex items-center justify-between"><span>SAPHIR Compliance</span> <span>🛡️</span></div>
-                    <p class="text-slate-600 text-xs leading-relaxed mt-2">
-                        Supervision réglementaire de la chaîne de valeur, journalisation asymétrique cryptée (SHA-256) pour garantir l'auditabilité des rapports.
-                    </p>
+                <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-center flex items-center justify-center space-x-2">
+                    <img src="logo-godgie.png" alt="GODGIE S.A." class="h-6 w-auto object-contain" onerror="this.style.display='none';">
+                    <p class="text-[9px] text-slate-500 font-bold uppercase">Direction Générale</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="projections" class="py-20 bg-white">
-        <div class="container mx-auto max-w-4xl px-5">
-            <div class="text-center mb-12">
-                <span class="text-saphirGreen font-bold text-xs uppercase tracking-widest">Plan de Développement</span>
-                <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight mt-1">Projections Stratégiques à Maturité (Horizon 2030)</h2>
-                <p class="text-slate-500 text-xs mt-1">Objectifs et indicateurs d'impact ciblés pour le déploiement de l'infrastructure régionale.</p>
-            </div>
-
-            <div class="overflow-hidden border border-slate-200 rounded-lg shadow-sm">
-                <table class="w-full text-left border-collapse bg-white text-sm">
-                    <thead class="bg-slate-900 text-white text-xs uppercase tracking-wider">
-                        <tr>
-                            <th class="p-4 font-semibold">Indicateur de Performance Macro</th>
-                            <th class="p-4 font-semibold text-right">Cible Visée à Maturité</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-200 text-slate-700">
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-4 font-medium">Producteurs enrôlés et encadrés</td>
-                            <td class="p-4 text-right font-bold text-slate-900">15 000+</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-4 font-medium">Superficie agricole cartographiée et auditée</td>
-                            <td class="p-4 text-right font-bold text-slate-900">50 000 ha</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-4 font-medium">Flux financiers sécurisés (Comptes Séquestres)</td>
-                            <td class="p-4 text-right font-bold text-saphirGreen">2 000 000 €</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-4 font-medium">Unités d'intrants contrôlées et validées (IMQG)</td>
-                            <td class="p-4 text-right font-bold text-slate-900">120 000 unités</td>
-                        </tr>
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-4 font-medium">Structures coopératives et groupements partenaires</td>
-                            <td class="p-4 text-right font-bold text-slate-900">300</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+    <footer class="bg-slate-950 text-slate-600 text-center py-8 text-xs border-t border-slate-900">
+        <div class="mb-3 flex justify-center items-center opacity-40">
+            <img src="logo-godgie.png" alt="Groupe GODGIE" class="h-7 w-auto object-contain" onerror="this.style.display='none';">
         </div>
-    </section>
+        <p>© 2026 Groupe GODGIE S.A. Tous droits réservés. Marques déposées auprès de l'OAPI.</p>
+    </footer>
 
-    <section id="status" class="py-20 bg-slate-100 border-t border-b border-slate-200">
-        <div class="container mx-auto max-w-4xl px-5">
-            <div class="text-center mb-12">
-                <span class="text-saphirGreen font-bold text-xs uppercase tracking-widest">Maturation Technique</span>
-                <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight mt-1">État d'Avancement de l'Infrastructure</h2>
+    <div x-show="openModule === 'pharma'" x-cloak class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all" x-transition>
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto" @click.away="openModule = null">
+            <div class="flex justify-between items-start mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-orange-500/10 p-2 rounded-xl text-orange-400 text-xl">🔬</div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">SAPHIR Pharma — Laboratoire Spécifique</h3>
+                        <p class="text-[10px] text-slate-500">Suivi pathologique et conformité moléculaire des intrants (IMQG)</p>
+                    </div>
+                </div>
+                <button @click="openModule = null" class="text-slate-500 hover:text-white font-bold text-sm bg-slate-800 p-1.5 rounded-lg">✕</button>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 font-medium text-sm">
-                <div class="bg-white p-5 rounded border border-slate-200 flex items-center space-x-3">
-                    <span class="text-green-600 text-lg">✓</span>
-                    <span class="text-slate-700">Prototype fonctionnel opérationnel (SAPHIR CORE)</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs space-y-2">
+                    <h4 class="font-bold text-orange-400 mb-1">🌿 Diagnostic & Traitement des Cultures</h4>
+                    <p class="text-slate-400 leading-relaxed">
+                        Cette section centralise l'imagerie de terrain. Les conseillers photographient les feuilles et tiges suspectes (ex: attaques de mirides, pourriture brune du cacao, mosaïque du manioc). L'analyse prédictive permet de préconiser le traitement ciblé exact et homologué.
+                    </p>
                 </div>
-                <div class="bg-white p-5 rounded border border-slate-200 flex items-center space-x-3">
-                    <span class="text-green-600 text-lg">✓</span>
-                    <span class="text-slate-700">Architecture mobile unifiée développée par rôles</span>
+                <div class="bg-slate-950 rounded-xl border border-slate-800 overflow-hidden flex flex-col justify-between">
+                    <div class="p-2 bg-slate-900 border-b border-slate-800 text-[10px] font-mono text-slate-500 flex justify-between">
+                        <span>📷 CANAL_PATHOLOGIE_VISUELLE</span>
+                        <span class="text-emerald-400">ONLINE</span>
+                    </div>
+                    <div class="p-6 text-center text-xs text-slate-500 italic">
+                        <div class="w-12 h-12 rounded-full border border-dashed border-slate-700 flex items-center justify-center mx-auto mb-2 text-lg">🌱</div>
+                        [Espace d'affichage : Photos de plans malades sous traitement / Analyses moléculaires]
+                    </div>
                 </div>
-                <div class="bg-white p-5 rounded border border-slate-200 flex items-center space-x-3">
-                    <span class="text-green-600 text-lg">✓</span>
-                    <span class="text-slate-700">Modèle algorithmique IMQG implémenté et testé</span>
-                </div>
-                <div class="bg-white p-5 rounded border border-slate-200 flex items-center space-x-3">
-                    <span class="text-amber-500 text-lg">⏳</span>
-                    <span class="text-slate-700">Phases pilotes préparatoires sectorielles en cours</span>
+            </div>
+
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs">
+                <h4 class="font-bold text-white mb-2">📹 Flux Vidéo : Démonstrations Phytosanitaires</h4>
+                <div class="bg-slate-900 aspect-video rounded-lg border border-slate-800 flex items-center justify-center text-[11px] text-slate-500 p-4 text-center">
+                    <p>Conteneur multimédia actif : Intégration de vos capsules vidéo de formation aux bonnes pratiques d'application ou d'analyses d'intrants.</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="py-20 bg-slate-950 text-white">
-        <div class="container mx-auto max-w-4xl px-5">
-            <div class="text-center mb-16">
-                <span class="text-saphirGold font-bold text-xs uppercase tracking-widest">Feuille de Route</span>
-                <h2 class="text-2xl md:text-3xl font-bold tracking-tight mt-1">Trajectoire d'Expansion Régionale</h2>
+    <div x-show="openModule === 'trade'" x-cloak class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all" x-transition>
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto" @click.away="openModule = null">
+            <div class="flex justify-between items-start mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-amber-500/10 p-2 rounded-xl text-amber-400 text-xl">💱</div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">SAPHIR Trade — Bourse Transactionnelle</h3>
+                        <p class="text-[10px] text-slate-500">Escrow mobile et sécurisation des flux financiers de brousse</p>
+                    </div>
+                </div>
+                <button @click="openModule = null" class="text-slate-500 hover:text-white font-bold text-sm bg-slate-800 p-1.5 rounded-lg">✕</button>
             </div>
 
-            <div class="relative border-l border-slate-800 pl-6 ml-4 space-y-12">
-                <div class="relative">
-                    <div class="absolute -left-[31px] top-1 w-3 h-3 bg-saphirGreen rounded-full border-4 border-slate-950"></div>
-                    <h4 class="text-base font-bold text-slate-100">2026 — Déploiement Pilote Écosystémique</h4>
-                    <p class="text-xs text-slate-400 mt-1 max-w-xl font-light">
-                        Validation des protocoles de terrain en zone de démonstration (Gabon). Consolidation des liaisons API et interconnexions initiales avec les agences de développement.
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs space-y-2">
+                    <h4 class="font-bold text-amber-400 mb-1">💰 Stabilisation des Revenus Agricoles</h4>
+                    <p class="text-slate-400 leading-relaxed">
+                        Le module Trade élimine les asymétries financières. En bloquant les fonds de l'acheteur dans un compte séquestre numérique sécurisé (Escrow) avant le chargement des camions de cacao ou de manioc, nous éliminons les risques d'impayés pour les producteurs ruraux.
                     </p>
                 </div>
-                <div class="relative">
-                    <div class="absolute -left-[31px] top-1 w-3 h-3 bg-slate-700 rounded-full border-4 border-slate-950"></div>
-                    <h4 class="text-base font-bold text-slate-200">2027 — Extension Transfrontalière</h4>
-                    <p class="text-xs text-slate-400 mt-1 max-w-xl font-light">
-                        Ouverture des corridors techniques en Afrique Centrale (Bassin du Cameroun) et enrôlement des premiers grands groupements de producteurs.
-                    </p>
-                </div>
-                <div class="relative">
-                    <div class="absolute -left-[31px] top-1 w-3 h-3 bg-slate-700 rounded-full border-4 border-slate-950"></div>
-                    <h4 class="text-base font-bold text-slate-200">2028 — Intégration Économique Globale</h4>
-                    <p class="text-xs text-slate-400 mt-1 max-w-xl font-light">
-                        Raccordement des banques agricoles régionales, des compagnies d'assurance et des exportateurs majeurs pour centraliser les flux de sécurisation.
-                    </p>
-                </div>
-                <div class="relative">
-                    <div class="absolute -left-[31px] top-1 w-3 h-3 bg-saphirGold rounded-full border-4 border-slate-950"></div>
-                    <h4 class="text-base font-bold text-saphirGold">2030 — Hub Régional Intégré de Traçabilité</h4>
-                    <p class="text-xs text-slate-400 mt-1 max-w-xl font-light">
-                        Consolidation de l'infrastructure SAPHIR comme le standard de référence pour la gouvernance et la résilience agricole dans l'espace CEMAC.
-                    </p>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between text-xs">
+                    <h4 class="font-bold text-slate-300 mb-2">📊 Volumes Financiers Sécurisés (Cibles)</h4>
+                    <div class="space-y-2 font-mono text-[11px]">
+                        <div class="flex justify-between border-b border-slate-800 pb-1">
+                            <span class="text-slate-500">Flux Transactions :</span>
+                            <span class="text-emerald-400 font-bold">2 000 000 €</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-800 pb-1">
+                            <span class="text-slate-500">Coopératives affiliées :</span>
+                            <span class="text-white">300 Unités</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Frais de plateforme :</span>
+                            <span class="text-amber-500">2.0%</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="bg-saphirDark text-white py-20 px-5">
-    
+    <div x-show="openModule === 'field'" x-cloak class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all" x-transition>
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto" @click.away="openModule = null">
+            <div class="flex justify-between items-start mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-emerald-500/10 p-2 rounded-xl text-emerald-400 text-xl">🗺️</div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">SAPHIR Field — SIG & Arpentage</h3>
+                        <p class="text-[10px] text-slate-500">Délimitation des parcelles et alertes épidémiologiques précoces</p>
+                    </div>
+                </div>
+                <button @click="openModule = null" class="text-slate-500 hover:text-white font-bold text-sm bg-slate-800 p-1.5 rounded-lg">✕</button>
+            </div>
+
+            <div
