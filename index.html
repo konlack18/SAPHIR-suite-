@@ -3,34 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAPHIR Suite v1.0 — Groupe GODGIE S.A.</title>
+    <title>SAPHIR Suite v1.5 — Écosystème de Gouvernance Phytosanitaire</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        /* Arrière-plan immersif : Plantation agricole avec voile professionnel sombre */
         body {
-            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(30, 41, 59, 0.93)), 
+            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.92), rgba(30, 41, 59, 0.95)), 
                               url('https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=1920');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
-        .custom-blur {
-            backdrop-filter: blur(10px);
+        .custom-blur { backdrop-filter: blur(12px); }
+        @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+        .marquee-content { display: flex; animation: marquee 25s linear infinite; }
+        .marquee-content:hover { animation-play-state: paused; }
+        /* Style personnalisé pour Leaflet pour coller au thème sombre */
+        .leaflet-layer, .leaflet-control-zoom-in, .leaflet-control-zoom-out {
+            filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
         }
-        /* Animation pour le défilement de la bourse agricole */
-        @keyframes marquee {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-50%); }
-        }
-        .marquee-content {
-            display: flex;
-            animation: marquee 25s linear infinite;
-        }
-        .marquee-content:hover {
-            animation-play-state: paused;
-        }
+        .leaflet-container { background: #0f172a !important; }
     </style>
 </head>
 <body class="text-slate-100 font-sans min-h-screen flex flex-col">
@@ -50,14 +45,15 @@
             </div>
         </div>
         
-        <div class="flex items-center space-x-4 mt-2 sm:mt-0">
+        <div class="flex items-center space-x-3 mt-2 sm:mt-0">
+            <div class="bg-slate-950/60 p-0.5 rounded-lg border border-slate-800 flex items-center mr-2 text-xs font-mono">
+                <button id="lang-fr" onclick="changeLang('fr')" class="bg-emerald-600 text-white px-2.5 py-1 rounded-md font-bold transition">FR</button>
+                <button id="lang-en" onclick="changeLang('en')" class="text-slate-400 hover:text-white px-2.5 py-1 rounded-md transition">EN</button>
+            </div>
             <span class="bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                Doctrine GASP v1.0
+                <span id="txt-nav-badge">Doctrine GASP v1.5</span>
             </span>
-            <a href="#contact" class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition shadow-lg flex items-center gap-2">
-                <i data-lucide="handshake" class="w-4 h-4"></i> Partenariat
-            </a>
         </div>
     </nav>
 
@@ -67,37 +63,37 @@
             <span class="inline-flex items-center gap-1.5 font-mono"><span class="text-slate-400 font-sans font-bold">CAFÉ ROBUSTA:</span> 1 850 FCFA/kg <i data-lucide="trending-down" class="w-3.5 h-3.5 text-rose-400"></i> <span class="text-rose-400">-0.4%</span></span>
             <span class="inline-flex items-center gap-1.5 font-mono"><span class="text-slate-400 font-sans font-bold">MANIOC BOULINGUI:</span> 450 FCFA/kg <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i> <span class="text-emerald-400">+3.1%</span></span>
             <span class="inline-flex items-center gap-1.5 font-mono"><span class="text-slate-400 font-sans font-bold">MAÏS GRAIN EN GROS:</span> 380 FCFA/kg <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i> <span class="text-emerald-400">+0.8%</span></span>
-            <span class="inline-flex items-center gap-1.5 font-mono"><span class="text-slate-400 font-sans font-bold">CACAO GABON/CAMEROUN:</span> 2 450 FCFA/kg <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i> <span class="text-emerald-400">+1.2%</span></span>
-            <span class="inline-flex items-center gap-1.5 font-mono"><span class="text-slate-400 font-sans font-bold">CAFÉ ROBUSTA:</span> 1 850 FCFA/kg <i data-lucide="trending-down" class="w-3.5 h-3.5 text-rose-400"></i> <span class="text-rose-400">-0.4%</span></span>
-            <span class="inline-flex items-center gap-1.5 font-mono"><span class="text-slate-400 font-sans font-bold">MANIOC BOULINGUI:</span> 450 FCFA/kg <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i> <span class="text-emerald-400">+3.1%</span></span>
-            <span class="inline-flex items-center gap-1.5 font-mono"><span class="text-slate-400 font-sans font-bold">MAÏS GRAIN EN GROS:</span> 380 FCFA/kg <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i> <span class="text-emerald-400">+0.8%</span></span>
         </div>
     </div>
 
     <header class="max-w-7xl mx-auto px-4 lg:px-8 pt-8 pb-4 text-center">
-        <h1 class="text-3xl lg:text-5xl font-extrabold tracking-tight mb-3">
+        <h1 id="txt-main-title" class="text-3xl lg:text-5xl font-extrabold tracking-tight mb-3">
             L'Architecture Globale de la <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Résilience Phytosanitaire</span>
         </h1>
-        <p class="text-slate-400 max-w-3xl mx-auto text-sm lg:text-base mb-6">
-            SAPHIR est l'écosystème applicatif de rupture adossé au modèle de **GASP** (Gouvernance Active des Systèmes Phytosanitaires). Il automatise la traçabilité internationale et sécurise la souveraineté sanitaire des grandes exploitations.
+        <p id="txt-main-desc" class="text-slate-400 max-w-3xl mx-auto text-sm lg:text-base mb-6">
+            SAPHIR est l'écosystème applicatif de rupture adossé au modèle de <strong>GASP</strong> (Gouvernance Active des Systèmes Phytosanitaires). Il automatise la traçabilité internationale et sécurise la souveraineté sanitaire des grandes exploitations.
         </p>
 
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto mb-4">
-            <div class="bg-slate-900/60 custom-blur p-4 rounded-xl border border-slate-700/50 shadow-md">
-                <div class="text-2xl lg:text-3xl font-bold text-emerald-400">15 000+</div>
-                <div class="text-xs text-slate-400 mt-1">Parcelles Référencées (SIG)</div>
+            <div class="bg-slate-900/60 custom-blur p-4 rounded-xl border border-slate-700/50 shadow-md text-left">
+                <div class="text-2xl lg:text-3xl font-bold text-emerald-400 font-mono"><span class="count-up" data-target="15000">0</span>+</div>
+                <div class="text-xs text-slate-200 font-medium mt-1">Parcelles Référencées (SIG)</div>
+                <div class="text-[10px] text-slate-500 italic mt-1 border-t border-slate-800/60 pt-1">Campagne Mbam et Kim, 2025</div>
             </div>
-            <div class="bg-slate-900/60 custom-blur p-4 rounded-xl border border-slate-700/50 shadow-md">
-                <div class="text-2xl lg:text-3xl font-bold text-emerald-400">-25%</div>
-                <div class="text-xs text-slate-400 mt-1">Optimisation Coût Intrants</div>
+            <div class="bg-slate-900/60 custom-blur p-4 rounded-xl border border-slate-700/50 shadow-md text-left">
+                <div class="text-2xl lg:text-3xl font-bold text-emerald-400 font-mono">-<span class="count-up" data-target="25">0</span>%</div>
+                <div class="text-xs text-slate-200 font-medium mt-1">Optimisation Coût Intrants</div>
+                <div class="text-[10px] text-slate-500 italic mt-1 border-t border-slate-800/60 pt-1">Modélisation d'impact Olam 2026</div>
             </div>
-            <div class="bg-slate-900/60 custom-blur p-4 rounded-xl border border-slate-700/50 shadow-md">
-                <div class="text-2xl lg:text-3xl font-bold text-emerald-400">J+1</div>
-                <div class="text-xs text-slate-400 mt-1">Délai Réaction Alerte</div>
+            <div class="bg-slate-900/60 custom-blur p-4 rounded-xl border border-slate-700/50 shadow-md text-left">
+                <div class="text-2xl lg:text-3xl font-bold text-emerald-400 font-mono">J+<span class="count-up" data-target="1">0</span></div>
+                <div class="text-xs text-slate-200 font-medium mt-1">Délai Réaction Réel</div>
+                <div class="text-[10px] text-slate-500 italic mt-1 border-t border-slate-800/60 pt-1">Validé par Brigade Urgence FAO</div>
             </div>
-            <div class="bg-slate-900/60 custom-blur p-4 rounded-xl border border-slate-700/50 shadow-md">
-                <div class="text-2xl lg:text-3xl font-bold text-emerald-400">100%</div>
-                <div class="text-xs text-slate-400 mt-1">Conformité RSPO / EUDR</div>
+            <div class="bg-slate-900/60 custom-blur p-4 rounded-xl border border-slate-700/50 shadow-md text-left">
+                <div class="text-2xl lg:text-3xl font-bold text-emerald-400 font-mono"><span class="count-up" data-target="100">0</span>%</div>
+                <div class="text-xs text-slate-200 font-medium mt-1">Conformité RSPO / EUDR</div>
+                <div class="text-[10px] text-slate-500 italic mt-1 border-t border-slate-800/60 pt-1">Traçabilité numérique intégrée</div>
             </div>
         </div>
     </header>
@@ -106,29 +102,29 @@
         
         <div class="lg:col-span-2 space-y-6">
             <h2 class="text-xl font-bold text-slate-200 flex items-center gap-2">
-                <i data-lucide="layers" class="text-emerald-400"></i> Les Modules Intégrés de la Suite
+                <i data-lucide="layers" class="text-emerald-400"></i> <span id="txt-sec-modules">Les Modules Intégrés de la Suite</span>
             </h2>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 
-                <div class="bg-slate-900/70 custom-blur p-5 rounded-2xl border border-slate-700/60 shadow-lg flex flex-col justify-between">
+                <div class="bg-gradient-to-br from-slate-900/90 to-slate-900/50 custom-blur p-5 rounded-2xl border-2 border-emerald-500/30 shadow-xl flex flex-col justify-between opacity-0 translate-y-4 transition-all duration-700" style="transition-delay: 100ms;">
                     <div>
                         <div class="flex justify-between items-start mb-3">
-                            <div class="text-emerald-400 bg-emerald-500/10 p-2 rounded-xl"><i data-lucide="activity" class="w-6 h-6"></i></div>
-                            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-mono px-2 py-0.5 rounded border border-emerald-500/30">Noyau GASP</span>
+                            <div class="text-emerald-400 bg-emerald-500/10 p-2 rounded-xl"><i data-lucide="cpu" class="w-6 h-6"></i></div>
+                            <span class="text-[10px] bg-emerald-500/30 text-emerald-300 font-mono px-2 py-0.5 rounded border border-emerald-500/40 font-bold uppercase tracking-wider">Cerveau Central</span>
                         </div>
-                        <h3 class="text-base font-bold mb-1 text-slate-100">SAPHIR Pharma</h3>
-                        <p class="text-xs text-slate-400 mb-3">Contrôle Pathologique & Traitement Analytique</p>
+                        <h3 class="text-base font-bold mb-1 text-slate-100">SAPHIR Core</h3>
+                        <p class="text-xs text-emerald-400 mb-3 font-mono">Algorithme Prédictif de Rupture</p>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Moteur algorithmique central croisant les indices de mauvaise gouvernance et de qualité pour générer de manière automatique le protocole de riposte édisanitaire sous 24 heures.
+                            Moteur décisionnel croisant la sévérité épidémique de brousse, la qualité moléculaire des intrants et la gouvernance structurelle des blocs. Il génère la directive immédiate.
                         </p>
                     </div>
-                    <button onclick="openModal('modal-pharma')" class="mt-4 w-full bg-slate-800/80 hover:bg-emerald-600 text-slate-200 hover:text-white font-medium text-xs py-2 px-4 rounded-xl transition border border-slate-700/60 text-center flex items-center justify-center gap-1.5">
-                        <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Ouvrir le Simulateur Core
+                    <button onclick="openModal('modal-pharma')" class="mt-4 w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-4 rounded-xl transition shadow-md text-center flex items-center justify-center gap-1.5">
+                        <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Initialiser le Simulateur Algorithmique
                     </button>
                 </div>
 
-                <div class="bg-slate-900/70 custom-blur p-5 rounded-2xl border border-slate-700/60 shadow-lg flex flex-col justify-between">
+                <div class="bg-slate-900/70 custom-blur p-5 rounded-2xl border border-slate-700/60 shadow-lg flex flex-col justify-between opacity-0 translate-y-4 transition-all duration-700" style="transition-delay: 250ms;">
                     <div>
                         <div class="flex justify-between items-start mb-3">
                             <div class="text-cyan-400 bg-cyan-500/10 p-2 rounded-xl"><i data-lucide="map-pin" class="w-6 h-6"></i></div>
@@ -137,15 +133,15 @@
                         <h3 class="text-base font-bold mb-1 text-slate-100">SAPHIR Field</h3>
                         <p class="text-xs text-slate-400 mb-3">Cartographie & Collecte Géolocalisée</p>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Interface de terrain permettant le référencement spatial des parcelles, le suivi de l'historique d'infestation, et le traçage géographique irréprochable exigé par la norme EUDR.
+                            Interface de terrain permettant le référencement spatial des parcelles, le suivi de l'historique d'infestation, et le traçage géographique exigé par la norme EUDR.
                         </p>
                     </div>
-                    <button onclick="openModal('modal-field')" class="mt-4 w-full bg-slate-800/80 hover:bg-cyan-600 text-slate-200 hover:text-white font-medium text-xs py-2 px-4 rounded-xl transition border border-slate-700/60 text-center flex items-center justify-center gap-1.5">
-                        <i data-lucide="map" class="w-3.5 h-3.5"></i> Explorer l'Infrastructure SIG
+                    <button onclick="openFieldModal()" class="mt-4 w-full bg-slate-800/80 hover:bg-cyan-600 text-slate-200 hover:text-white font-medium text-xs py-2 px-4 rounded-xl transition border border-slate-700/60 text-center flex items-center justify-center gap-1.5">
+                        <i data-lucide="map" class="w-3.5 h-3.5"></i> Déployer l'Infrastructure SIG Leaflet
                     </button>
                 </div>
 
-                <div class="bg-slate-900/70 custom-blur p-5 rounded-2xl border border-slate-700/60 shadow-lg flex flex-col justify-between">
+                <div class="bg-slate-900/70 custom-blur p-5 rounded-2xl border border-slate-700/60 shadow-lg flex flex-col justify-between opacity-0 translate-y-4 transition-all duration-700" style="transition-delay: 400ms;">
                     <div>
                         <div class="flex justify-between items-start mb-3">
                             <div class="text-amber-400 bg-amber-500/10 p-2 rounded-xl"><i data-lucide="arrow-left-right" class="w-6 h-6"></i></div>
@@ -158,41 +154,85 @@
                         </p>
                     </div>
                     <button onclick="openTradeModal()" class="mt-4 w-full bg-slate-800/80 hover:bg-amber-600 text-slate-200 hover:text-white font-medium text-xs py-2 px-4 rounded-xl transition border border-slate-700/60 text-center flex items-center justify-center gap-1.5">
-                        <i data-lucide="line-chart" class="w-3.5 h-3.5"></i> Consulter les Cours & Diagramme
+                        <i data-lucide="line-chart" class="w-3.5 h-3.5"></i> Consulter les Cours Regionaux
                     </button>
                 </div>
 
-                <div class="bg-slate-900/70 custom-blur p-5 rounded-2xl border border-slate-700/60 shadow-lg flex flex-col justify-between">
+                <div class="bg-slate-900/70 custom-blur p-5 rounded-2xl border border-slate-700/60 shadow-lg flex flex-col justify-between opacity-0 translate-y-4 transition-all duration-700" style="transition-delay: 550ms;">
                     <div>
                         <div class="flex justify-between items-start mb-3">
                             <div class="text-teal-400 bg-teal-500/10 p-2 rounded-xl"><i data-lucide="heart-handshake" class="w-6 h-6"></i></div>
                             <span class="text-[10px] bg-teal-500/20 text-teal-300 font-mono px-2 py-0.5 rounded border border-teal-500/30">Impact Social</span>
                         </div>
                         <h3 class="text-base font-bold mb-1 text-slate-100">SAPHIR Femme</h3>
-                        <p class="text-xs text-teal-400 mb-3 font-semibold">Accompagnement Social & Force de Travail</p>
+                        <p class="text-xs text-teal-400 mb-3 font-semibold">Accompagnement Social & Équité</p>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Dispositif d’inclusion et d'encadrement éthique ciblant prioritairement les **femmes**, les **jeunes ruraux** et les **personnes vulnérables** pour structurer l'équité des revenus.
+                            Dispositif d’inclusion et d'encadrement éthique ciblant prioritairement les <strong>femmes</strong>, les <strong>jeunes ruraux</strong> et les <strong>personnes vulnérables</strong> (Conformité RSPO 3.0).
                         </p>
                     </div>
                     <button onclick="openModal('modal-femme')" class="mt-4 w-full bg-slate-800/80 hover:bg-teal-600 text-slate-200 hover:text-white font-medium text-xs py-2 px-4 rounded-xl transition border border-slate-700/60 text-center flex items-center justify-center gap-1.5">
                         <i data-lucide="users" class="w-3.5 h-3.5"></i> Piloter l'Impact Social
                     </button>
                 </div>
+            </div>
 
+            <div class="bg-slate-900/80 custom-blur p-6 rounded-2xl border border-slate-700/50 shadow-xl space-y-4 opacity-0 translate-y-4 transition-all duration-700" style="transition-delay: 700ms;">
+                <h3 class="text-base font-bold text-emerald-400 flex items-center gap-2">
+                    <i data-lucide="file-check-2"></i> Documents de Référence & Validations Stratégiques
+                </h3>
+                <p class="text-xs text-slate-400">
+                    Téléchargez les livrables d'orientation et d'architecture rédigés pour les comités d'arbitrage agro-industriels (Olam Gabon 2030).
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                    <a href="Olam_Note_Vision_Strategique.pdf" download class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-3 rounded-xl flex items-center justify-between group transition">
+                        <div class="flex items-center space-x-3">
+                            <i data-lucide="file-text" class="w-5 h-5 text-emerald-500"></i>
+                            <div class="text-left">
+                                <span class="text-xs font-bold block text-slate-200">Note de Vision 2030</span>
+                                <span class="text-[10px] text-slate-500 block">Olam Gabon — DG & Ops</span>
+                            </div>
+                        </div>
+                        <i data-lucide="download" class="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition"></i>
+                    </a>
+                    
+                    <a href="Olam_Note_Orientation_Strategique.pdf" download class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-3 rounded-xl flex items-center justify-between group transition">
+                        <div class="flex items-center space-x-3">
+                            <i data-lucide="file-text" class="w-5 h-5 text-emerald-500"></i>
+                            <div class="text-left">
+                                <span class="text-xs font-bold block text-slate-200">Note d'Orientation</span>
+                                <span class="text-[10px] text-slate-500 block">Souveraineté Sanitaire</span>
+                            </div>
+                        </div>
+                        <i data-lucide="download" class="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition"></i>
+                    </a>
+                </div>
             </div>
         </div>
 
         <div class="space-y-6">
             <div class="bg-slate-900/70 custom-blur p-6 rounded-2xl border border-slate-700/60 shadow-xl text-center">
-                <div class="w-20 h-20 bg-gradient-to-tr from-emerald-600 to-teal-500 rounded-full mx-auto mb-3 flex items-center justify-center border-2 border-slate-600 shadow-inner">
-                    <i data-lucide="user" class="w-10 h-10 text-white"></i>
+                <div class="w-28 h-28 bg-gradient-to-tr from-emerald-600 to-teal-500 rounded-2xl mx-auto mb-4 overflow-hidden border-2 border-slate-700 shadow-xl relative group">
+                    <img src="photo-konlack.jpg" alt="Ing. Konlack" class="w-full h-full object-cover" onerror="this.style.display='none'; document.getElementById('avatar-fallback').classList.remove('hidden');">
+                    <div id="avatar-fallback" class="hidden w-full h-full flex items-center justify-center bg-slate-950">
+                        <i data-lucide="user-cog" class="w-12 h-12 text-emerald-400"></i>
+                    </div>
                 </div>
                 <h2 class="text-lg font-bold">Ing. Konlack Moffo Vinet Romeo</h2>
                 <p class="text-[11px] text-emerald-400 font-mono uppercase tracking-wider">Architecte Solution & Plant Specialist</p>
-                <div class="text-xs text-slate-400 mt-3 space-y-1.5 text-left border-t border-slate-800 pt-3">
-                    <div class="flex items-center gap-2"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-500"></i> 14 ans d'expérience terrain (Afrique Centrale)</div>
-                    <div class="flex items-center gap-2"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-500"></i> Gestion d'Urgence Épidémique (FAO)</div>
-                    <div class="flex items-center gap-2"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-500"></i> Cadre Doctoral (Wageningen / Agro Dijon)</div>
+                
+                <div class="text-xs text-slate-400 mt-4 space-y-2.5 text-left border-t border-slate-800/80 pt-4">
+                    <div class="flex items-start gap-2">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i> 
+                        <span><strong>14 ans d'expérience</strong> opérationnelle en ingénierie de brousse (Afrique Centrale).</span>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i> 
+                        <span>Coordination d'urgences épidémiques d'envergure (<strong>Cadre FAO</strong>).</span>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i> 
+                        <span>Recherche appliquée & validation doctorale (<strong>WUR / Agro Dijon</strong>).</span>
+                    </div>
                 </div>
             </div>
 
@@ -235,11 +275,11 @@
         <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative">
             <button onclick="closeModal('modal-pharma')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
             <h3 class="text-lg font-bold mb-2 flex items-center gap-2 text-emerald-400"><i data-lucide="cpu"></i> Cœur Algorithmique SAPHIR Core (Modèle GASP)</h3>
-            <p class="text-xs text-slate-400 mb-4">Ajustez les indicators de brousse pour évaluer le risque phytosanitaire.</p>
+            <p class="text-xs text-slate-400 mb-4">Simulez le niveau de risque épidémique d'un bloc de production agro-industriel.</p>
             
             <div class="space-y-4 bg-slate-950/50 p-4 rounded-xl border border-slate-800 mb-4">
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Indice de Sévérité Clinique (Terrain) : <span id="val-sev" class="text-emerald-400 font-bold">2</span>/4</label>
+                    <label class="block text-xs text-slate-400 mb-1">Indice de Sévérité Clinique (Brousse) : <span id="val-sev" class="text-emerald-400 font-bold">2</span>/4</label>
                     <input type="range" id="input-sev" min="1" max="4" value="2" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
                 </div>
                 <div>
@@ -247,14 +287,14 @@
                     <input type="range" id="input-imqg" min="0" max="100" value="75" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Indice de Mauvaise Gouvernance de Zone (IMG) : <span id="val-img" class="text-emerald-400 font-bold">30</span>%</label>
+                    <label class="block text-xs text-slate-400 mb-1">Mauvaise Gouvernance Interne du Bloc (IMG) : <span id="val-img" class="text-emerald-400 font-bold">30</span>%</label>
                     <input type="range" id="input-img" min="0" max="100" value="30" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
                 </div>
             </div>
 
             <div id="result-box" class="p-4 rounded-xl border font-medium text-sm transition-all duration-150">
                 <div class="flex justify-between items-center">
-                    <span id="result-text">Analyse en cours...</span>
+                    <span id="result-text">Analyse structurelle...</span>
                     <span id="result-score" class="text-base font-bold bg-slate-950/50 px-2 py-0.5 rounded">0%</span>
                 </div>
                 <div id="result-action" class="text-xs font-mono mt-1 text-slate-300"></div>
@@ -263,14 +303,16 @@
     </div>
 
     <div id="modal-field" class="hidden fixed inset-0 bg-slate-950/80 custom-blur flex items-center justify-center p-4 z-50">
-        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
-            <button onclick="closeModal('modal-field')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-            <h3 class="text-lg font-bold mb-2 flex items-center gap-2 text-cyan-400"><i data-lucide="map"></i> Infrastructure SAPHIR Field (SIG)</h3>
-            <p class="text-xs text-slate-300 mb-4">Le module cartographique gère le suivi spatialisé en temps réel.</p>
-            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs font-mono text-cyan-400 space-y-2">
-                <div>&gt; Connexion Satellitaire active... OK</div>
-                <div>&gt; Couches SIG référencées : 15 240 polygones</div>
-                <div>&gt; Alerte de proximité EUDR : Active (Zéro déforestation)</div>
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative">
+            <button onclick="closeFieldModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white z-50 bg-slate-950/80 p-1 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <h3 class="text-lg font-bold mb-1 flex items-center gap-2 text-cyan-400"><i data-lucide="map"></i> Supervision Spatiale — SAPHIR Field</h3>
+            <p class="text-xs text-slate-400 mb-4">Cartographie dynamique en temps réel. Secteur test de démonstration (Haute-Sanaga / Kango).</p>
+            
+            <div id="map-container" class="w-full h-80 rounded-xl border border-slate-800 overflow-hidden shadow-inner z-10"></div>
+            
+            <div class="mt-3 flex justify-between text-[10px] text-slate-500 font-mono">
+                <span>Source : Moteur SIG SAPHIR v1.5</span>
+                <span class="text-cyan-400 animate-pulse">● Système Connecté</span>
             </div>
         </div>
     </div>
@@ -278,28 +320,9 @@
     <div id="modal-trade" class="hidden fixed inset-0 bg-slate-950/80 custom-blur flex items-center justify-center p-4 z-50">
         <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button onclick="closeModal('modal-trade')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-            <h3 class="text-lg font-bold mb-2 flex items-center gap-2 text-amber-400"><i data-lucide="line-chart"></i> Bourse Intégrée SAPHIR Trade</h3>
+            <h3 class="text-lg font-bold mb-2 flex items-center gap-2 text-amber-400"><i data-lucide="line-chart"></i> Évolution des Cours & Comptes Séquestres</h3>
             <p class="text-xs text-slate-400 mb-4">Fluctuations et tendances indicatives des cours régionaux des denrées (FCFA / kg).</p>
             
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
-                    <span class="text-[10px] text-slate-400 block font-semibold">Cacao</span>
-                    <span class="font-mono text-base font-bold text-emerald-400">2 450 F</span>
-                </div>
-                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
-                    <span class="text-[10px] text-slate-400 block font-semibold">Café Robusta</span>
-                    <span class="font-mono text-base font-bold text-rose-400">1 850 F</span>
-                </div>
-                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
-                    <span class="text-[10px] text-slate-400 block font-semibold">Manioc</span>
-                    <span class="font-mono text-base font-bold text-emerald-400">450 F</span>
-                </div>
-                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
-                    <span class="text-[10px] text-slate-400 block font-semibold">Maïs Grain</span>
-                    <span class="font-mono text-base font-bold text-emerald-400">380 F</span>
-                </div>
-            </div>
-
             <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 w-full h-64 mb-4 relative">
                 <canvas id="marketChart"></canvas>
             </div>
@@ -313,32 +336,22 @@
             <p class="text-xs text-slate-400 mb-4">Architecture opérationnelle d'encadrement des forces de travail vulnérables en milieu rural.</p>
             
             <div class="space-y-4">
-                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800/80 flex items-start space-x-3">
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-start space-x-3">
                     <div class="text-teal-400 bg-teal-500/10 p-2 rounded-lg mt-0.5"><i data-lucide="smile" class="w-4 h-4"></i></div>
                     <div>
                         <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wide">1. Autonomisation des Femmes</h4>
                         <p class="text-xs text-slate-400 mt-1 leading-relaxed">Garantie d'équité salariale stricte, structuration des comités de récolte féminins et accès direct aux comptes sécurisés de la Suite SAPHIR Trade pour éliminer les intermédiaires financiers.</p>
                     </div>
                 </div>
-
-                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800/80 flex items-start space-x-3">
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-start space-x-3">
                     <div class="text-cyan-400 bg-cyan-500/10 p-2 rounded-lg mt-0.5"><i data-lucide="graduation-cap" class="w-4 h-4"></i></div>
                     <div>
                         <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wide">2. Insertion Technique des Jeunes</h4>
                         <p class="text-xs text-slate-400 mt-1 leading-relaxed">Programmes de formation accélérée aux technologies de brousse (SIG, outils connectés de diagnostic GASP) pour professionnaliser la jeunesse rurale et freiner l'exode.</p>
                     </div>
                 </div>
-
-                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800/80 flex items-start space-x-3">
-                    <div class="text-amber-400 bg-amber-500/10 p-2 rounded-lg mt-0.5"><i data-lucide="shield-alert" class="w-4 h-4"></i></div>
-                    <div>
-                        <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wide">3. Protection des Personnes Vulnérables</h4>
-                        <p class="text-xs text-slate-400 mt-1 leading-relaxed">Aménagement des postes de travail physiques, couverture d'urgence sanitaire intégrée et cartographie sociale préventive pour interdire strictement le travail forcé ou dissimulé.</p>
-                    </div>
-                </div>
             </div>
-
-            <p class="text-[10px] text-slate-500 mt-4 italic text-center">Ces 3 volets structurent l'architecture de responsabilité sociale exigée lors des audits internationaux RSPO / EUDR.</p>
+            <p class="text-[10px] text-slate-500 mt-4 italic text-center">Ces volets structurent l'architecture de responsabilité sociale exigée lors des audits internationaux RSPO / EUDR.</p>
         </div>
     </div>
 
@@ -346,34 +359,106 @@
         <div class="max-w-7xl mx-auto space-y-2">
             <div>© 2026 SAPHIR Suite. Tous droits réservés.</div>
             <div class="text-slate-600 max-w-2xl mx-auto text-[11px]">
-                Modélisation technologique sous la protection intellectuelle exclusive du **Groupe GODGIE S.A.** Toute reproduction ou exploitation du processus logique GASP sans accord écrit de l'auteur est passible de poursuites (OAPI).
+                Modélisation technologique sous la protection intellectuelle exclusive du <strong>Groupe GODGIE S.A.</strong> Toute reproduction ou exploitation du processus logique GASP sans accord écrit de l'auteur est passible de poursuites (OAPI).
             </div>
         </div>
     </footer>
 
     <script>
-        // Initialisation globale des icônes Lucide
         lucide.createIcons();
         let myChartInstance = null;
+        let myMapInstance = null;
 
-        // Fonctions d'ouverture/fermeture standards pour les fenêtres
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-        }
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
+        // DICTIONNAIRE DE TRADUCTION ANGLAIS / FRANÇAIS (PROBLÈME 6)
+        const translations = {
+            fr: {
+                title: "L'Architecture Globale de la Résilience Phytosanitaire",
+                desc: "SAPHIR est l'écosystème applicatif de rupture adossé au modèle de GASP (Gouvernance Active des Systèmes Phytosanitaires). Il automatise la traçabilité internationale et sécurise la souveraineté sanitaire des grandes exploitations.",
+                secModules: "Les Modules Intégrés de la Suite",
+                navBadge: "Doctrine GASP v1.5"
+            },
+            en: {
+                title: "Global Architecture for Phytosanitary Resilience",
+                desc: "SAPHIR is the breakthrough software ecosystem built upon the GASP model (Active Governance of Phytosanitary Systems). It automates global traceability and safeguards the sanitary sovereignty of large-scale plantations.",
+                secModules: "Integrated Software Suite Modules",
+                navBadge: "GASP Framework v1.5"
+            }
+        };
+
+        function changeLang(lang) {
+            document.getElementById('txt-main-title').innerHTML = translations[lang].title;
+            document.getElementById('txt-main-desc').innerHTML = translations[lang].desc;
+            document.getElementById('txt-sec-modules').innerText = translations[lang].secModules;
+            document.getElementById('txt-nav-badge').innerText = translations[lang].navBadge;
+            
+            document.getElementById('lang-fr').className = lang === 'fr' ? "bg-emerald-600 text-white px-2.5 py-1 rounded-md font-bold transition" : "text-slate-400 hover:text-white px-2.5 py-1 rounded-md transition";
+            document.getElementById('lang-en').className = lang === 'en' ? "bg-emerald-600 text-white px-2.5 py-1 rounded-md font-bold transition" : "text-slate-400 hover:text-white px-2.5 py-1 rounded-md transition";
         }
 
-        // Fonction d'ouverture exclusive pour SAPHIR Trade (avec rendu à la demande du graphique)
+        // ANIMATION 1 : COMPTEUR NUMÉRIQUE PROGRESSIF (COUNT UP)
+        document.addEventListener("DOMContentLoaded", () => {
+            const counters = document.querySelectorAll('.count-up');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const speed = target / 40; 
+                const updateCount = () => {
+                    const current = +counter.innerText;
+                    if (current < target) {
+                        counter.innerText = Math.ceil(current + speed);
+                        setTimeout(updateCount, 25);
+                    } else {
+                        counter.innerText = target.toLocaleString();
+                    }
+                };
+                updateCount();
+            });
+
+            // ANIMATION 3 : FADE-IN EN CASCADE DES CARDS MODULES
+            const cards = document.querySelectorAll('main div div.grid > div, main div.space-y-6 > div');
+            cards.forEach(card => card.classList.remove('opacity-0', 'translate-y-4'));
+        });
+
+        // FONCTIONS D'OUVERTURE ET FERMETURE DE MODALE
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        // PROBLÈME 4 : VRAIE CARTE INTERACTIVE LEAFLET.JS POUR SAPHIR FIELD
+        function openFieldModal() {
+            openModal('modal-field');
+            
+            // Si la carte n'est pas encore créée, on l'initialise
+            if (!myMapInstance) {
+                setTimeout(() => {
+                    // Centré sur une coordonnée centrale fictive mais réaliste d'Afrique Centrale (ex: Gabon / Cameroun)
+                    myMapInstance = L.map('map-container').setView([0.55, 10.12], 10);
+                    
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 18,
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(myMapInstance);
+
+                    // Ajout de 3 marqueurs de parcelles stratégiques (Haute-Sanaga / Kango)
+                    const markers = [
+                        { coords: [0.55, 10.12], label: "Bloc Central A1 — Station Diagnostic GASP" },
+                        { coords: [0.58, 10.15], label: "Bloc Périphérique B — Alerte Traçabilité EUDR" },
+                        { coords: [0.52, 10.09], label: "Parcelle Pilote C — Protocole J+1 Actif" }
+                    ];
+
+                    markers.forEach(m => {
+                        L.marker(m.coords).addTo(myMapInstance).bindPopup(`<b>${m.label}</b>`);
+                    });
+                }, 100);
+            } else {
+                setTimeout(() => { myMapInstance.invalidateSize(); }, 100);
+            }
+        }
+
+        function closeFieldModal() { closeModal('modal-field'); }
+
+        // GRAPHDIAGRAMME DE COURS (SAPHIR TRADE)
         function openTradeModal() {
             openModal('modal-trade');
-            
-            // On nettoie l'ancien graphique pour éviter les superpositions d'éléments au survol
-            if (myChartInstance !== null) {
-                myChartInstance.destroy();
-            }
-
-            // Un court délai garantit que la modale est visible pour que Chart.js calcule la taille
+            if (myChartInstance !== null) { myChartInstance.destroy(); }
             setTimeout(() => {
                 const ctx = document.getElementById('marketChart').getContext('2d');
                 myChartInstance = new Chart(ctx, {
@@ -382,25 +467,20 @@
                         labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin'],
                         datasets: [
                             { label: 'Cacao (FCFA/kg)', data: [2100, 2250, 2200, 2380, 2410, 2450], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderWidth: 2, tension: 0.3 },
-                            { label: 'Café Robusta (FCFA/kg)', data: [1950, 1920, 1890, 1860, 1840, 1850], borderColor: '#f43f5e', backgroundColor: 'rgba(244, 63, 94, 0.1)', borderWidth: 2, tension: 0.3 },
-                            { label: 'Manioc (FCFA/kg)', data: [390, 410, 400, 425, 435, 450], borderColor: '#06b6d4', backgroundColor: 'rgba(6, 182, 212, 0.1)', borderWidth: 2, tension: 0.2 },
-                            { label: 'Maïs Grain (FCFA/kg)', data: [350, 365, 360, 370, 375, 380], borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', borderWidth: 2, tension: 0.2 }
+                            { label: 'Manioc (FCFA/kg)', data: [390, 410, 400, 425, 435, 450], borderColor: '#06b6d4', backgroundColor: 'rgba(6, 182, 212, 0.1)', borderWidth: 2, tension: 0.2 }
                         ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
-                        scales: {
-                            x: { grid: { color: 'rgba(51, 65, 85, 0.2)' }, ticks: { color: '#94a3b8' } },
-                            y: { grid: { color: 'rgba(51, 65, 85, 0.2)' }, ticks: { color: '#94a3b8' } }
-                        }
+                        plugins: { legend: { labels: { color: '#94a3b8' } } },
+                        scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } }
                     }
                 });
             }, 50);
         }
 
-        // Éléments du simulateur SAPHIR Pharma
+        // SIMULATEUR ALGORITHMIQUE CORE
         const sSev = document.getElementById('input-sev');
         const sImqg = document.getElementById('input-imqg');
         const sImg = document.getElementById('input-img');
@@ -426,8 +506,9 @@
             scoreFraude = Math.min(100, Math.max(0, scoreFraude * 100));
             rScore.innerText = scoreFraude.toFixed(1) + "%";
 
+            // ANIMATION 2 : EFFET PULSE LORSQUE L'ALERTE DÉPASSE 65%
             if (scoreFraude >= 65) {
-                rBox.className = "p-4 rounded-xl border font-medium text-sm transition-all bg-red-500/10 border-red-500/40 text-red-400";
+                rBox.className = "p-4 rounded-xl border font-medium text-sm transition-all bg-red-500/10 border-red-500/40 text-red-400 animate-pulse";
                 rText.innerText = "🚨 CRITIQUE : Anomalie GASP Majeure (Alerte Intrusion)";
                 rAction.innerText = "Directive : Activation immédiate du Protocole PROT-J1-ALPHA";
             } else if (scoreFraude >= 40) {
